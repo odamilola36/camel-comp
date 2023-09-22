@@ -14,17 +14,23 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 
 @Component
-@ConditionalOnProperty(name = "camel.hello.enabled", havingValue = "true")
+@ConditionalOnProperty(name = "camel.enable.seda", havingValue = "true")
 public class SedaRoute extends RouteBuilder {
     @Override
     public void configure() {
         from("timer:ping?period=200")
+                .routeId("Timer")
+                .log(LoggingLevel.ERROR, "logging stuff")
                 .process(exchange -> {
                     Message message = new DefaultMessage(exchange);
                     message.setBody(new Date());
                     exchange.setMessage(message);
                 })
-                .to("direct:complexProcess");
+                .to("seda:weightLifter?multipleConsumers=true");
+
+        from("seda:weightLifter?multipleConsumers=true")
+                .routeId("seda-weightlifter")
+                        .to("direct:complexProcess");
 
         from("direct:complexProcess")
                 .log(LoggingLevel.ERROR, "{body}")
