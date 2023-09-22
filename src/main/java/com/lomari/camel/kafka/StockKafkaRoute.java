@@ -3,11 +3,13 @@ package com.lomari.camel.kafka;
 
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
+@ConditionalOnProperty(name = "camel.enable.kafka", havingValue = "true")
 public class StockKafkaRoute extends RouteBuilder {
 
     final String KAFKA_ENDPOINT = "kafka:%s?brokers=localhost:29092";
