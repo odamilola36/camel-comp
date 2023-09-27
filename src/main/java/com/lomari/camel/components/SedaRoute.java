@@ -14,7 +14,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 
 @Component
-@ConditionalOnProperty(name = "camel.enable.seda", havingValue = "true")
+@ConditionalOnProperty(name = "camel.enable.seda", havingValue = "false")
 public class SedaRoute extends RouteBuilder {
     @Override
     public void configure() {
